@@ -11,8 +11,12 @@ async function request(path, options = {}, token = null) {
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS)
 
+  // For FormData (file uploads) the browser must set Content-Type itself so it
+  // includes the multipart boundary — never force application/json on it.
+  const isFormData = typeof FormData !== 'undefined' && options.body instanceof FormData
+
   const headers = {
-    'Content-Type': 'application/json',
+    ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
     Accept: 'application/json',
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...(options.headers || {}),
@@ -166,12 +170,13 @@ export async function uploadAmlDocument(clientId, file, docType, token) {
   formData.append('document', file)
   formData.append('type', docType)
 
+  // request() detects FormData and omits Content-Type so the browser sets the
+  // multipart boundary itself.
   return request(
     `/api/clients/${clientId}/aml/documents`,
     {
       method: 'POST',
       body: formData,
-      headers: {}, // Let browser set multipart boundary
     },
     token
   )

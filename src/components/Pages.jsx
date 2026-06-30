@@ -762,11 +762,13 @@ export function AmlPage({ formData, onChange, onBlur, amlStatus, onAmlStatusChan
             <AmlBadge status={amlStatus.status} />
           </>
         )}
+        {/* Temporarily disabled — electronic verification (FrankieOne) not live yet
         {!disabled && (
           <Button onClick={handleRunVerification} disabled={verifying || !clientId || !token} style={{ marginLeft: 'auto' }}>
             {verifying ? 'Verifying…' : 'Run electronic verification (FrankieOne)'}
           </Button>
         )}
+        */}
       </div>
       {verifyError && (
         <Banner type="orange" icon="⚠">{verifyError}</Banner>
@@ -863,6 +865,11 @@ export function AmlPage({ formData, onChange, onBlur, amlStatus, onAmlStatusChan
                 }}
                 style={{ fontSize: 11, fontFamily: 'Poppins, sans-serif', color: C.textSecondary }}
               />
+              {!uploadDocType && (
+                <span style={{ fontSize: 10, color: C.textMuted, fontFamily: 'Poppins, sans-serif' }}>
+                  Choose a document type first to enable upload.
+                </span>
+              )}
             </Field>
           </Grid>
         )}
