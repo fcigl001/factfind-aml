@@ -1,4 +1,4 @@
-# PIERS Fact Finder v2 — factfindAML.pierstech.com
+# PIERS Fact Finder v2 — factfind.pierstech.com
 
 React SPA for the PIAA property investment fact find with AML/CTF compliance.
 
@@ -99,7 +99,7 @@ aws cloudfront create-invalidation --distribution-id {DIST_ID} --paths "/*"
 - Origin: S3 bucket
 - Default root object: `index.html`
 - Error pages: 404 → `/index.html` (200) — required for SPA routing
-- HTTPS: Certificate in ACM for `factfindAML.pierstech.com`
+- HTTPS: Certificate in ACM for `factfind.pierstech.com`
 - CORS: Managed by PIERS backend — no CloudFront CORS rules needed
 
 ### S3 bucket policy
@@ -119,7 +119,7 @@ aws cloudfront create-invalidation --distribution-id {DIST_ID} --paths "/*"
 ### PIERS backend CORS
 The PIERS backend at `piers.forrestercohen.com` must allow:
 ```
-Access-Control-Allow-Origin: https://factfindAML.pierstech.com
+Access-Control-Allow-Origin: https://factfind.pierstech.com
 Access-Control-Allow-Headers: Authorization, Content-Type, Accept
 Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS
 ```

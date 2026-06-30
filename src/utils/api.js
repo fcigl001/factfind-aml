@@ -2,7 +2,7 @@
 // Auth: v1 pattern — JWT passed as Authorization: Bearer header
 // Base: https://piers.forrestercohen.com
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'https://factfindAML.peirstech.com'
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://piers.forrestercohen.com'
 const TIMEOUT_MS = parseInt(import.meta.env.VITE_API_TIMEOUT || '30000')
 
 // ─── Core fetch wrapper ───────────────────────────────────────────────────────
