@@ -84,11 +84,13 @@ export default function App() {
           // Fact find endpoint not yet deployed — use client data only, status = DRAFT
         }
 
-        // Map once from the merged source so the saved draft's form_data
-        // (which holds AML and any other draft-only fields) is applied on reload.
+        // Map from the client record (source of truth for identity, goals,
+        // assets, etc.), but graft on the saved draft's form_data so draft-only
+        // fields (AML, and any client edits) are applied on reload. We only pull
+        // form_data off the fact-find response — never its envelope keys, which
+        // would clobber the client collections.
         const mapped = mapClientToForm({
           ...client,
-          ...(factFind || {}),
           form_data: factFind?.form_data || client.form_data,
         })
         setFormData(mapped)
