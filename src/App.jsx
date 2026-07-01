@@ -64,13 +64,15 @@ export default function App() {
       try {
         // 1. Fetch client record (existing endpoint — always available)
         const clientRes = await getClient(clientId, token)
-        const mapped = mapClientToForm(clientRes)
-        setFormData(mapped)
+        const client = clientRes?.data || clientRes || {}
 
-        // 2. Try to fetch fact find state (new endpoint — may not exist yet)
+        // 2. Try to fetch fact find state (new endpoint — may not exist yet).
+        //    This carries the saved draft form_data (incl. advisor-only AML fields).
+        let factFind = null
         try {
           const ffRes = await getFactFind(clientId, token)
           const ff = ffRes?.data || ffRes
+          factFind = ff
           setMeta({
             status: ff.status || 'DRAFT',
             locked: ff.locked || false,
@@ -78,10 +80,18 @@ export default function App() {
             updated_at: ff.updated_at || null,
             advisor_notes: ff.advisor_notes || [],
           })
-          // If server has saved form_data, merge it (already handled in mapClientToForm)
         } catch {
           // Fact find endpoint not yet deployed — use client data only, status = DRAFT
         }
+
+        // Map once from the merged source so the saved draft's form_data
+        // (which holds AML and any other draft-only fields) is applied on reload.
+        const mapped = mapClientToForm({
+          ...client,
+          ...(factFind || {}),
+          form_data: factFind?.form_data || client.form_data,
+        })
+        setFormData(mapped)
 
         // 3. Fetch AML status (advisor only)
         if (role === 'advisor') {
